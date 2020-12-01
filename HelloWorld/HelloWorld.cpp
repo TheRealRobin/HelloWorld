@@ -190,7 +190,7 @@ int main()
 	system("pause");
 }
 */
-
+/*
 #include <iostream>
 #include <cstring>
 using namespace std;
@@ -248,3 +248,4 @@ int main()
 
 }
 
+*/

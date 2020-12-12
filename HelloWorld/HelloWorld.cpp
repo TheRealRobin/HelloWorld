@@ -190,62 +190,244 @@ int main()
 	system("pause");
 }
 */
-/*
+
+#include <list>
+#include <string>
 #include <iostream>
-#include <cstring>
 using namespace std;
 
-class stadt
-{
+class Lampe {
 public:
-	float x, y;
-	char  name[20];
+	bool isOn = false;
+	float verbrauch;
+
+	Lampe() {
+		verbrauch = 0;
+		isOn = false;
+	}
+
+	Lampe(float v, bool s) {
+		verbrauch = v;
+		isOn = s;
+	}
+
+	void setStatus(bool s) {
+		isOn = s;
+	}
+
+	bool getStatus() {
+		return isOn;
+	}
+
+	float getVerbrauch() {
+		if (isOn) {
+			return verbrauch;
+		}
+		else {
+			return 0;
+		}
+	}
 };
 
-class kurort : public stadt // abgeleitete Klasse 1
-{
+class Lichtschalter {
 public:
-	float kurtaxe;
+
+	Lampe lamp;
+
+	Lichtschalter(float v, bool s) {
+		lamp = Lampe(v, s);
+	}
+
+	void umschalten() {
+		if (lamp.isOn) {
+			lamp.isOn = false;
+		}
+		else {
+			lamp.isOn = true;
+		}
+	}
+
 };
 
-class kurklinik : public kurort // abgeleitete Klasse 2
-{
+class Heizkoerper {
 public:
-	int anzahl_betten;
+	bool isOn;
+	float verbrauch;
+
+	Heizkoerper(float v, bool s) {
+		isOn = s;
+		verbrauch = v;
+	}
+
+	float getVerbrauch() {
+		if (isOn) {
+			return verbrauch;
+		}
+		else {
+			return 0;
+		}
+	}
+
+	bool getStatus() {
+		return isOn;
+	}
+
 };
 
-int main()
-{
+class Raum {
+public:
+	float laenge;
+	float breite;
+	float qm;
+	float verbrauch_sonstiges;
+	list<Heizkoerper> heizungen;
+	list<Lichtschalter> lampen;
 
-	float min, temp;
-	char ort;
-	class stadt hannover;
-	class stadt hildesheim;
-	class kurort bad_salzdetfurth;
-	class kurklinik rehaklinik;
+	Raum(float l, float b, float v_s) {
+		laenge = l;
+		breite = b;
+		qm = l * b;
+		verbrauch_sonstiges = v_s;
+	}
 
-	hannover.x = 9.74; hannover.y = 52.37;   //km ost nord
-	hildesheim.x = 9.95; hildesheim.y = 52.15;
-	bad_salzdetfurth.x = 10.01; bad_salzdetfurth.y = 52.07;
-	bad_salzdetfurth.x = 10.02; bad_salzdetfurth.y = 52.07;
+	Raum(float l, float b, float v_s, list<Heizkoerper> l_hz, list<Lichtschalter> l_ls) {
+		laenge = l;
+		breite = b;
+		qm = l * b;
+		verbrauch_sonstiges = v_s;
+		heizungen = l_hz;
+		lampen = l_ls;
+	}
 
-	temp = sqrt((hannover.x - hildesheim.x) * (hannover.x - hildesheim.x)
-		+ (hannover.y - hildesheim.y) * (hannover.y - hildesheim.y));
+	float getVerbrauch() {
+		float total = 0;
+		total += verbrauch_sonstiges;
+		for (Heizkoerper i : heizungen) {
+			total += i.getVerbrauch();
+		}
+		for (Lichtschalter i : lampen) {
+			total += i.lamp.getVerbrauch();
+		}
+		return total;
+	}
 
-	cout << " km " << temp << endl;
+	float getQm() {
+		return qm;
+	}
 
-	temp = sqrt((hannover.x - bad_salzdetfurth.x) * (hannover.x - bad_salzdetfurth.x)
-		+ (hannover.y - bad_salzdetfurth.y) * (hannover.y - bad_salzdetfurth.y));
+};
 
-	cout << " km (real ca. 40 km) " << temp << endl;
+class Gebaeude {
+public:
+	list<Raum> raeume;
 
-	bad_salzdetfurth.kurtaxe = 5.0;
-	rehaklinik.kurtaxe = 4.50;
-	rehaklinik.anzahl_betten = 146;
-	//  TEST  hannover.kurtaxe = 2.0; // Fehler!!
-	//  TEST  hannover.kurtaxe = 2.0; // Fehler!!
+	Gebaeude(list<Raum> r) {
+		raeume = r;
+	}
 
+	float getVerbrauch() {
+		float total = 0;
+		for (Raum i : raeume) {
+			 total+= i.getVerbrauch();
+		}
+		return total;
+	}
 
+};
+
+auto createLichter() {
+	list<Lichtschalter> lichtRaum1;
+	list<Lichtschalter> lichtRaum2;
+	list<Lichtschalter> lichtRaum3;
+
+	Lichtschalter l1 = Lichtschalter(5.0, true);
+	Lichtschalter l2 = Lichtschalter(3.0, true);
+	Lichtschalter l3 = Lichtschalter(1.5, false);
+	Lichtschalter l4 = Lichtschalter(4.8, false);
+	Lichtschalter l5 = Lichtschalter(2.4, true);
+	Lichtschalter l6 = Lichtschalter(4.20, true);
+	Lichtschalter l7 = Lichtschalter(6.9, true);
+	Lichtschalter l8 = Lichtschalter(8.8, true);
+	Lichtschalter l9 = Lichtschalter(1.23, true);
+	Lichtschalter l10 = Lichtschalter(5.0, false);
+
+	lichtRaum1.push_back(l1);
+	lichtRaum1.push_back(l2);
+	lichtRaum1.push_back(l3);
+	lichtRaum2.push_back(l4);
+	lichtRaum2.push_back(l5);
+	lichtRaum2.push_back(l6);
+	lichtRaum3.push_back(l7);
+	lichtRaum3.push_back(l8);
+	lichtRaum3.push_back(l9);
+	lichtRaum3.push_back(l10);
+	struct result { list<Lichtschalter> a; list<Lichtschalter> b; list<Lichtschalter> c; };
+	return result { lichtRaum1, lichtRaum2, lichtRaum3 };
 }
 
-*/
+auto createHeizung() {
+	list<Heizkoerper> heizRaum1;
+	list<Heizkoerper> heizRaum2;
+	list<Heizkoerper> heizRaum3;
+
+	Heizkoerper h1 = Heizkoerper(300.0, true);
+	Heizkoerper h2 = Heizkoerper(250.0, true);
+	Heizkoerper h3 = Heizkoerper(400.0, false);
+	Heizkoerper h4 = Heizkoerper(410.0, true);
+	Heizkoerper h5 = Heizkoerper(430.0, true);
+	Heizkoerper h6 = Heizkoerper(520.0, false);
+	Heizkoerper h7 = Heizkoerper(120.0, true);
+
+	heizRaum1.push_back(h1);
+	heizRaum1.push_back(h2);
+	heizRaum2.push_back(h3);
+	heizRaum2.push_back(h4);
+	heizRaum3.push_back(h5);
+	heizRaum3.push_back(h6);
+	heizRaum3.push_back(h7);
+	struct result { list<Heizkoerper> a; list<Heizkoerper> b; list<Heizkoerper> c; };
+	return result{heizRaum1, heizRaum2, heizRaum3};
+}
+
+list<Raum> createSpace() {
+	list<Raum> listR;
+	auto l = createLichter();
+	auto h = createHeizung();
+
+	Raum r1 = Raum(3.5, 2.5, 0, h.a, l.a);
+	Raum r2 = Raum(5.0, 4.0, 0, h.b, l.b);
+	Raum r3 = Raum(8.75, 6.5, 0, h.c, l.c);
+	
+	listR.push_back(r1);
+	listR.push_back(r2);
+	listR.push_back(r3);
+
+	return listR;
+}
+
+void printInfo(Gebaeude g) {
+	cout << "Gebaeude gesamtverbrauch: " << g.getVerbrauch() << endl << endl;
+	cout << "	Verbrauch Raeume:" << endl;
+	int i = 1;
+	for (Raum r : g.raeume) {
+		cout << "	Raum NR " << i << ": " << r.getVerbrauch() << " Raumgroesse: " << r.getQm() << "qm" << endl;
+		int j = 1;
+		for (Lichtschalter l : r.lampen) {
+			cout << "		Lampe NR " << j << ": " << l.lamp.getVerbrauch() << " Eingeschaltet: " << l.lamp.getStatus() << endl;
+			j++;
+		}
+		int k = 1;
+		for (Heizkoerper h : r.heizungen) {
+			cout << "		Heizung NR " << k << ": " << h.getVerbrauch() << " Eingeschaltet: " << h.getStatus() << endl;
+			k++;
+		}
+		i++;
+	}
+	
+}
+
+int main() {
+	Gebaeude testgebaeude = Gebaeude(createSpace());
+	printInfo(testgebaeude);
+	system("pause");
+}

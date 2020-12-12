@@ -139,7 +139,26 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ArchitekturStuff.cpp" />
     <ClCompile Include="HelloWorld.cpp" />
+    <ClCompile Include="Nettopreis.cpp" />
+    <ClCompile Include="qFormula.cpp" />
+    <ClCompile Include="Quadratzahl.cpp" />
+    <ClCompile Include="Strukturen.cpp" />
+    <ClCompile Include="Tresor.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ArchitekturStuff.h" />
+    <ClInclude Include="HelloWorld.h" />
+    <ClInclude Include="Nettopreis.h" />
+    <ClInclude Include="qFormula.h" />
+    <ClInclude Include="Quadratzahl.h" />
+    <ClInclude Include="Strukturen.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Tresor.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="HelloWorld.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -7,10 +7,10 @@
 #include "Nettopreis.h"
 
 int main() {
-	nettopreis();
-	quadraticFormula();
-	runTresor();
-	squareAndStuff();
-	runStrukturen();
-	runArchitekturStuff();
+	//nettopreis();
+	//quadraticFormula();
+	//runTresor();
+	//squareAndStuff();
+	//runStrukturen();
+	//runArchitekturStuff();
 }
